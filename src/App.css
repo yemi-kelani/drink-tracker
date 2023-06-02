@@ -78,6 +78,10 @@ li, a, button {
   text-decoration: none;
 }
 
+hr {
+  width: 90%;
+}
+
 #counter-page, #history-page {
   display: flex;
   flex-direction: column;
