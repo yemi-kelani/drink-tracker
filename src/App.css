@@ -60,14 +60,21 @@ body {
   z-index: inherit;
 }
 
+.active-link {
+  background-color: #eee;
+  border: 1px solid #eee;
+}
+
 .page-container {
   width: 100%;
   height: auto;
 
   top: 70px;
-  left: 0;
   position: absolute;
   z-index: -1;
+
+  display: flex;
+  justify-content: center;
 }
 
 li, a, button {
@@ -80,6 +87,25 @@ li, a, button {
 
 hr {
   width: 90%;
+  margin-bottom: 10px;
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  transition: 0.25s ease-out;
+  -webkit-filter: brightness(80%);
+}
+
+p {
+  font-size: larger;
+  font-weight: bold;
+  padding: 10px 0px;
 }
 
 #counter-page, #history-page {
@@ -87,8 +113,51 @@ hr {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 90%;
+}
+
+#counter-page > #counter-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 20px 0px;
 }
 
 #counter-page > .log-options button {
   margin: 10px 10px;
+}
+
+.alert {
+  margin: 5px 0px;
+  border: 1px solid black;
+  border-radius: 5px;
+  color: white;
+}
+
+.alert > p {
+  margin: auto;
+  padding: 10px 5px;
+}
+
+.alert-green {
+  color: white;
+  background-color: green;
+}
+
+.alert-yellow {
+  color: black;
+  background-color: yellow;
+}
+
+.alert-orange {
+  background-color: orange;
+}
+
+.alert-red {
+  background-color: red;
 }
