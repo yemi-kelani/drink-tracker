@@ -155,6 +155,7 @@ p {
 }
 
 .alert-orange {
+  color: black;
   background-color: orange;
 }
 

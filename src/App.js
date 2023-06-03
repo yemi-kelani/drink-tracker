@@ -47,27 +47,30 @@ const Counter = ({ counter, setCounter }) => {
         : <></>
       }
       {
-        counter >= 2 && counter < 4 ? 
+        counter == 2 ? 
         <div className="alert alert-yellow">
-          <p>Heads up! You've had <b>2</b>  or more drinks already.</p>
+          <p>Heads up! You've had <b>2</b> drinks already.</p>
         </div> 
         : <></>
       }
       {
-        counter >= 4 && counter < 6 ? 
+        counter >= 3 && counter < 5 ? 
         <div className="alert alert-orange">
           <p>
-            Heads up! You've had <b>4</b> or more drinks.
-            Maybe slow down?
+            Maybe slow down? You've had <b>3</b> drinks so far.
           </p>
         </div> 
         : <></>
       }
       {
-        counter >= 6 ? 
+        counter >= 5 ? 
         <div className="alert alert-red">
           <p>
-            Woah, slow down! You've had <b>{counter}</b> drinks.
+            {
+              counter < 6 ?
+              <>Woah! You've had <b>{counter}</b> drinks.</>
+              : <>Stop drinking.</>
+            }
           </p>
         </div> 
         : <></>
