@@ -1,0 +1,49 @@
+{
+  "api": {
+    "savedrinkapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "drinkHistoryHandler"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "drinkHistoryHandler": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_drinkHistoryHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "drinkHistoryHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_drinkHistoryHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "drinkHistoryHandler"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "drinkstable": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "resourceName": "drinkstable",
+  "tableName": "drinkstable",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "number"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

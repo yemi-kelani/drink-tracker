@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-drinktracker-dev-35444-authRole",
+      "UnauthRoleArn": "arn:aws:iam::916581941433:role/amplify-drinktracker-dev-35444-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::916581941433:role/amplify-drinktracker-dev-35444-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-drinktracker-dev-35444-deployment",
+      "UnauthRoleName": "amplify-drinktracker-dev-35444-unauthRole",
+      "StackName": "amplify-drinktracker-dev-35444",
+      "StackId": "arn:aws:cloudformation:us-east-2:916581941433:stack/amplify-drinktracker-dev-35444/ca2c15e0-0447-11ee-9c91-0210c4ec5239",
+      "AmplifyAppId": "d3edbsihp1r40k"
+    },
+    "categories": {
+      "function": {
+        "drinkHistoryHandler": {
+          "deploymentBucketName": "amplify-drinktracker-dev-35444-deployment",
+          "s3Key": "amplify-builds/drinkHistoryHandler-74334d6c5378682b4546-build.zip"
+        }
+      },
+      "api": {
+        "savedrinkapi": {}
+      }
+    }
+  }
+}
