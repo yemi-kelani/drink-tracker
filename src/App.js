@@ -13,8 +13,9 @@ const uuid = require('uuid');
 const postEndpoint = async (endpoint, init) => {
   try {
     
-    const response = await API.post(apiname, endpoint, init);
+    const response = await API.post(apiname, endpoint, JSON.stringify(init));
     console.log(response);
+    return response;
 
   } catch (error) {
     console.log(`hit an error while querying "${endpoint}"`);
@@ -162,7 +163,7 @@ const Counter = ({ counter, setCounter}) => {
   );
 };
 
-const History = () => {
+const History = ({ sessions, setSessions }) => {
 
 
   React.useEffect(() => {
@@ -177,11 +178,34 @@ const History = () => {
         }
       };
 
-      console.log("Requesting server to add a new session...");
+      console.log("Requesting server for all sessions...");
       const sess_response = await postEndpoint("/get-sessions", init);
+      if(sess_response.statusCode !== 200)
+      {
+        throw new Error("Issue requesting server for all sessions associated with user ", userID);
+      }
+
+      // TODO: proccess sess_response to get list of sessions
+      // const sessions = sess_response.body;
+      const seshes = [
+        {
+          sessionid: 0,
+          userid: userID,
+          starttime: "2023-06-09 17:12:31.195",
+          endtime: "2023-06-09 17:12:31.195",
+        },
+        {
+          sessionid: 1,
+          userid: userID,
+          starttime: "2023-06-09 17:12:31.195",
+          endtime: "2023-06-09 17:12:31.195",
+        },
+      ];
+
+      setSessions(seshes);
 
       // TODO: for each session create an HTML element for it
-      const sessions = sess_response['sessions']
+
 
     };
 
@@ -194,7 +218,13 @@ const History = () => {
     <div id="counter-page">
       <h3>Alcohol Consumption History</h3>
       <hr />
-      history:
+      <p>History:</p>
+      {sessions.map((session) => (
+        <div key={session.sessionid}>
+          <p>Start Time: {session.starttime}</p>
+          <p>End Time: {session.endtime}</p>
+        </div>
+      ))}
     </div>
   );
 };
@@ -207,6 +237,7 @@ const style = {
 const App = () => {
   const [page, setPage] = React.useState("counter");
   const [counter, setCounter] = React.useState(0);
+  const [sessions, setSessions] = React.useState([]);
 
   React.useEffect(() => {
     const existingUserID = localStorage.getItem("userid");
@@ -215,7 +246,7 @@ const App = () => {
     if (existingUserID === undefined || existingUserID === null || true) {
 
       // create user ID
-      var userid = getRandomInt(0, 50000)
+      var userid = getRandomInt(0, 50000);
       localStorage.setItem("userid", userid);
 
       // add user ID to rds

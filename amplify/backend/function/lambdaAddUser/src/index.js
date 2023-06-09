@@ -19,24 +19,29 @@ exports.handler = (event, context, callback) => {
     const insertQuery = "INSERT INTO users (userid) VALUES (?);";
     const values = [parseInt(reqBody.userid)];
 
-    callback(null, {
-        statusCode: 400,
-        body: event.toString(),
+    connection.query(insertQuery, values, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        callback(null, {
+            "isBase64Encoded": false,
+            statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
+            body: error.toString(),
+        });
+      } else {
+        callback(
+            null, {
+            "isBase64Encoded": false,
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
+            body: "Success",
+        });
+      }
     });
-  
-    // connection.query(insertQuery, values, (error, results, fields) => {
-    //   if (error) {
-    //     console.error(error);
-    //     callback(null, {
-    //       statusCode: 400,
-    //       body: error.toString(),
-    //     });
-    //   } else {
-    //     callback(
-    //         null, {
-    //       statusCode: 200,
-    //       body: "Success",
-    //     });
-    //   }
-    // });
   };
