@@ -1,0 +1,38 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-drinktracker-dev-120323-authRole",
+      "UnauthRoleArn": "arn:aws:iam::965361184075:role/amplify-drinktracker-dev-120323-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::965361184075:role/amplify-drinktracker-dev-120323-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-drinktracker-dev-120323-deployment",
+      "UnauthRoleName": "amplify-drinktracker-dev-120323-unauthRole",
+      "StackName": "amplify-drinktracker-dev-120323",
+      "StackId": "arn:aws:cloudformation:us-east-2:965361184075:stack/amplify-drinktracker-dev-120323/8bc8d1b0-06e7-11ee-ae11-06558a7c6693",
+      "AmplifyAppId": "d23h65c5l4prc9"
+    },
+    "categories": {
+      "function": {
+        "lambdaAddUser": {
+          "deploymentBucketName": "amplify-drinktracker-dev-120323-deployment",
+          "s3Key": "amplify-builds/lambdaAddUser-536e6f67554e7276496e-build.zip"
+        },
+        "lambdaAddSession": {
+          "deploymentBucketName": "amplify-drinktracker-dev-120323-deployment",
+          "s3Key": "amplify-builds/lambdaAddSession-386664706d384a327456-build.zip"
+        },
+        "lambdaAddDrink": {
+          "deploymentBucketName": "amplify-drinktracker-dev-120323-deployment",
+          "s3Key": "amplify-builds/lambdaAddDrink-34315239454170523269-build.zip"
+        },
+        "lambdaGetSessions": {
+          "deploymentBucketName": "amplify-drinktracker-dev-120323-deployment",
+          "s3Key": "amplify-builds/lambdaGetSessions-69436f303767636f4d68-build.zip"
+        }
+      },
+      "api": {
+        "drinktrackerapi": {}
+      }
+    }
+  }
+}

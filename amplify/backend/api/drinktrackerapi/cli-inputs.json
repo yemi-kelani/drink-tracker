@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "paths": {
+    "/add-user": {
+      "name": "/add-user",
+      "lambdaFunction": "lambdaAddUser",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/add-session": {
+      "name": "/add-session",
+      "lambdaFunction": "lambdaAddSession",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/add-drink": {
+      "name": "/add-drink",
+      "lambdaFunction": "lambdaAddDrink",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/get-sessions": {
+      "name": "/get-sessions",
+      "lambdaFunction": "lambdaGetSessions",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "api": {
+    "drinktrackerapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "lambdaAddUser"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "lambdaAddSession"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "lambdaAddDrink"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "lambdaGetSessions"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "lambdaAddDrink": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "lambdaAddSession": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "lambdaAddUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "lambdaGetSessions": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_lambdaAddDrink_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaAddDrink"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaAddDrink_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaAddDrink"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaAddSession_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaAddSession"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaAddSession_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaAddSession"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaAddUser_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaAddUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaAddUser_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaAddUser"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaGetSessions_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaGetSessions"
+        }
+      ]
+    },
+    "AMPLIFY_function_lambdaGetSessions_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "lambdaGetSessions"
+        }
+      ]
+    }
+  }
+}

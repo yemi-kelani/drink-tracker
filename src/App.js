@@ -1,46 +1,23 @@
 import "./App.css";
 import * as React from "react";
+import {Amplify, API} from "aws-amplify";
+import awsExports from "./aws-exports";
+Amplify.configure(awsExports);
+
+const apiname = "drinktrackerapi";
 const uuid = require('uuid');
 
-const API = "https://5zagbx91fe.execute-api.us-east-2.amazonaws.com/test"
+// const API = "https://5zagbx91fe.execute-api.us-east-2.amazonaws.com/test"
 
 // HELPER FUNCTIONS ==============================================================================================
 const postEndpoint = async (endpoint, init) => {
   try {
-    console.log(`Posting to API endpoint: \"${endpoint}\"`);
-    console.log(API + endpoint);
-    console.log(init['body']);
-    // fetch(API + endpoint, { method: "POST", body: JSON.stringify(init['body']) , mode: 'no-cors'})
-    //   .then((response) => {
-    //     console.log(response);
-    //     return response;
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-
-
-    // const response = await fetch(API + endpoint, { method: "POST", body: JSON.stringify(init['body']) , mode: 'no-cors'});
-    // // const data = response.json();
-    // // console.log(data);
-    // return response;
-
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(init["body"]),
-      redirect: "follow",
-      mode: "no-cors"
-    };
-
-    const response = await fetch(API+endpoint, requestOptions);
-    const data = await response.text();
-    console.log(data);
-    return data;
-
+    
+    const response = await API.post(apiname, endpoint, init);
+    console.log(response);
 
   } catch (error) {
-    console.log(`hit an error while querying \"${endpoint}\"`);
+    console.log(`hit an error while querying "${endpoint}"`);
     console.log("Error:", error);
     return error;
   }
@@ -57,14 +34,12 @@ function getRandomInt(min, max) {
 };
 
 // COMPONENTS ====================================================================================================
-const Counter = ({ counter, setCounter, sessionID, setSessionID, drinkTimes, setDrinkTimes }) => {
+const Counter = ({ counter, setCounter}) => {
   // every time the counter changes this will run automatically
   React.useEffect(() => {
 
     const handleEffect = async () => {
       const userID = localStorage.getItem("userid");
-
-      // TODO: delete this eventually, adding error checking to be safe
       if (userID === null || userID === undefined) return;
 
       if (counter !== 0) {
@@ -83,45 +58,31 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID, drinkTimes, set
             },
           };
 
+          console.log("userID for session", userID);
+
           console.log("Requesting server to add a new session...");
-          console.log(init);
-          const sesh_response = await postEndpoint("/add_session", init); // should return new sessionID that was added
-          console.log("session id:", sesh_response);
+          const response = await postEndpoint("/add-session", init); // should return new sessionID that was added
+          
+          
+          // const lastInsertID = parseInt(response.json()["body"]);
+          // console.log("lastInsertID", lastInsertID)
+          
 
           // Reset drinkTimes state variable for new session
-          setDrinkTimes([]);
-          setDrinkTimes([...drinkTimes, starttime]) // then add the new first drink 
+          localStorage.setItem("timestamps", [starttime]);
 
-          const drink_init = {
-            body: {
-              sessionid: sessionID,
-              drink_time: starttime,
-            }
-          };
-          const drink_response = await postEndpoint("/add_drink", drink_init);
-
-          // TODO: if the response is bad, what do we do here? reset counter? 
-          // else, we need to setSessionID(sesh_response);
-
+          // const drink_init = {
+          //   body: {
+          //     sessionid: localStorage.getItem("sessionID"),
+          //     drink_time: starttime,
+          //   }
+          // };
+          // const drink_response = await postEndpoint("/add-drink", drink_init);
         } else {
-          const date = getNowDateTime();
-
-          // Add new drinkTime to state 
-          setDrinkTimes([...drinkTimes, date]);
+          const drinkTimeStamp = getNowDateTime();
+          const timestamps = localStorage.getItem("timestamps");
+          localStorage.setItem("timestamps", [...timestamps, drinkTimeStamp]);
         }
-      } 
-      else if (drinkTimes !== [])
-      { 
-        if 
-        const init = {
-          body: {
-            sessionid: sessionID,
-            drink_time: date,
-          },
-        };
-
-        // query aws lambda function
-        const drink_response = await postEndpoint("/add_drink", init);
       }
     }
     handleEffect();
@@ -164,7 +125,7 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID, drinkTimes, set
       ) : (
         <></>
       )}
-      {counter == 2 ? (
+      {counter === 2 ? (
         <div className="alert alert-yellow">
           <p>
             Heads up! You've had <b>2</b> drinks already.
@@ -207,7 +168,7 @@ const History = () => {
   React.useEffect(() => {
     const userID = localStorage.getItem("userid");
     // TODO: delete this eventually, adding error checking to be safe
-    if (userID === null || userID === undefined) return;
+    if (userID === null || userID === undefined || true) return;
 
     const handleEffect = async () => {
       const init = {
@@ -217,7 +178,7 @@ const History = () => {
       };
 
       console.log("Requesting server to add a new session...");
-      const sess_response = await postEndpoint("/get_sessions", init);
+      const sess_response = await postEndpoint("/get-sessions", init);
 
       // TODO: for each session create an HTML element for it
       const sessions = sess_response['sessions']
@@ -246,17 +207,16 @@ const style = {
 const App = () => {
   const [page, setPage] = React.useState("counter");
   const [counter, setCounter] = React.useState(0);
-  const [sessionID, setSessionID] = React.useState(null);
-  const [drinkTimes, setDrinkTimes] = React.useState([]);
 
   React.useEffect(() => {
     const existingUserID = localStorage.getItem("userid");
-    if (existingUserID === undefined || existingUserID === null) {
+
+    // TODO: change this if statement back!
+    if (existingUserID === undefined || existingUserID === null || true) {
 
       // create user ID
-      var userid = getRandomInt(0, 20000)
+      var userid = getRandomInt(0, 50000)
       localStorage.setItem("userid", userid);
-
 
       // add user ID to rds
       const init = {
@@ -264,7 +224,11 @@ const App = () => {
           userid: localStorage.getItem("userid")
         }
       }
-      const response = postEndpoint("/add_user", init);
+      const response = postEndpoint("/add-user", init);
+      if (response.statusCode === 400) {
+        throw new Error("userid could not be added to the database!");
+      }
+      
     }
     console.log("userid:", localStorage.getItem("userid"));
 
@@ -276,8 +240,6 @@ const App = () => {
       renderPage = <Counter
         counter={counter}
         setCounter={setCounter}
-        sessionID={sessionID}
-        setSessionID={setSessionID}
       />;
       break;
     case "history":
@@ -287,8 +249,6 @@ const App = () => {
       renderPage = <Counter
         counter={counter}
         setCounter={setCounter}
-        sessionID={sessionID}
-        setSessionID={setSessionID}
       />;
   }
 
