@@ -9,8 +9,8 @@ const postEndpoint = async (endpoint, init) => {
   try {
     console.log(`Posting to API endpoint: \"${endpoint}\"`);
     console.log(API+endpoint)
-    
-    fetch(API + endpoint, { method: "POST", body: init['body'] , mode: 'no-cors'})
+    console.log(init['body'])
+    fetch(API + endpoint, { method: "POST", body: JSON.stringify(init['body']) , mode: 'no-cors'})
       .then((response) => {
         console.log(response);
         return response;
@@ -29,6 +29,12 @@ const postEndpoint = async (endpoint, init) => {
 const getNowDateTime = () => {
   return new Date().toISOString().split('T').join(' ').split('Z').join('');
 };
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
 
 // COMPONENTS ====================================================================================================
 const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
@@ -58,6 +64,7 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
           };
 
           console.log("Requesting server to add a new session...");
+          console.log(init);
           const sesh_response = await postEndpoint("/add_session", init); // should return new sessionID that was added
           console.log(sesh_response);
 
@@ -215,7 +222,9 @@ const App = () => {
     if (existingUserID === undefined || existingUserID === null) {
       
       // create user ID
-      localStorage.setItem("userid", uuid.v4());
+      var userid = getRandomInt(0, 20000) 
+      localStorage.setItem("userid", userid);
+
 
       // add user ID to rds
       const init = {
@@ -226,6 +235,7 @@ const App = () => {
       const response = postEndpoint("/add_user", init);
     }
     console.log("userid:", localStorage.getItem("userid"));
+
   }, []);
   
   let renderPage;
