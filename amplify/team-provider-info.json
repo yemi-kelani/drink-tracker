@@ -15,7 +15,7 @@
       "function": {
         "lambdaAddUser": {
           "deploymentBucketName": "amplify-drinktracker-dev-120323-deployment",
-          "s3Key": "amplify-builds/lambdaAddUser-72644836416c2b6f7754-build.zip"
+          "s3Key": "amplify-builds/lambdaAddUser-425978374653706a506f-build.zip"
         },
         "lambdaAddSession": {
           "deploymentBucketName": "amplify-drinktracker-dev-120323-deployment",

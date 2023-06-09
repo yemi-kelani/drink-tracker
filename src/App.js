@@ -211,7 +211,7 @@ const History = ({ sessions, setSessions }) => {
 
     handleEffect();
 
-  }, []);
+  }, [sessions]);
 
 
   return (
