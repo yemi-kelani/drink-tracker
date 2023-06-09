@@ -8,20 +8,40 @@ const API = "https://5zagbx91fe.execute-api.us-east-2.amazonaws.com/test"
 const postEndpoint = async (endpoint, init) => {
   try {
     console.log(`Posting to API endpoint: \"${endpoint}\"`);
-    console.log(API+endpoint)
-    console.log(init['body'])
-    fetch(API + endpoint, { method: "POST", body: JSON.stringify(init['body']) , mode: 'no-cors'})
-      .then((response) => {
-        console.log(response);
-        return response;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    console.log(API + endpoint);
+    console.log(init['body']);
+    // fetch(API + endpoint, { method: "POST", body: JSON.stringify(init['body']) , mode: 'no-cors'})
+    //   .then((response) => {
+    //     console.log(response);
+    //     return response;
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
 
 
-  } catch(error) {
+    // const response = await fetch(API + endpoint, { method: "POST", body: JSON.stringify(init['body']) , mode: 'no-cors'});
+    // // const data = response.json();
+    // // console.log(data);
+    // return response;
+
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(init["body"]),
+      redirect: "follow",
+      mode: "no-cors"
+    };
+
+    const response = await fetch(API+endpoint, requestOptions);
+    const data = await response.text();
+    console.log(data);
+    return data;
+
+
+  } catch (error) {
     console.log(`hit an error while querying \"${endpoint}\"`);
+    console.log("Error:", error);
     return error;
   }
 };
@@ -34,10 +54,10 @@ function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-}
+};
 
 // COMPONENTS ====================================================================================================
-const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
+const Counter = ({ counter, setCounter, sessionID, setSessionID, drinkTimes, setDrinkTimes }) => {
   // every time the counter changes this will run automatically
   React.useEffect(() => {
 
@@ -66,11 +86,13 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
           console.log("Requesting server to add a new session...");
           console.log(init);
           const sesh_response = await postEndpoint("/add_session", init); // should return new sessionID that was added
-          console.log(sesh_response);
+          console.log("session id:", sesh_response);
+
+          
 
           const drink_init = {
             body: {
-              sessionid: sessionID,                  
+              sessionid: sessionID,
               drink_time: starttime,
             }
           };
@@ -78,12 +100,12 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
 
           // TODO: if the response is bad, what do we do here? reset counter? 
           // else, we need to setSessionID(sesh_response);
-          
+
         } else {
           const date = getNowDateTime();
           const init = {
             body: {
-              sessionid: sessionID,                  
+              sessionid: sessionID,
               drink_time: date,
             },
           };
@@ -189,7 +211,7 @@ const History = () => {
       const sess_response = await postEndpoint("/get_sessions", init);
 
       // TODO: for each session create an HTML element for it
-      const sessions =  sess_response['sessions']
+      const sessions = sess_response['sessions']
 
     };
 
@@ -216,13 +238,14 @@ const App = () => {
   const [page, setPage] = React.useState("counter");
   const [counter, setCounter] = React.useState(0);
   const [sessionID, setSessionID] = React.useState(null);
+  const [drinkTimes, setDrinkTimes] = React.useState([]);
 
   React.useEffect(() => {
     const existingUserID = localStorage.getItem("userid");
     if (existingUserID === undefined || existingUserID === null) {
-      
+
       // create user ID
-      var userid = getRandomInt(0, 20000) 
+      var userid = getRandomInt(0, 20000)
       localStorage.setItem("userid", userid);
 
 
@@ -237,27 +260,27 @@ const App = () => {
     console.log("userid:", localStorage.getItem("userid"));
 
   }, []);
-  
+
   let renderPage;
   switch (page) {
     case "counter":
-      renderPage = <Counter 
-                      counter={counter} 
-                      setCounter={setCounter} 
-                      sessionID={sessionID}
-                      setSessionID={setSessionID}
-                  />;
+      renderPage = <Counter
+        counter={counter}
+        setCounter={setCounter}
+        sessionID={sessionID}
+        setSessionID={setSessionID}
+      />;
       break;
     case "history":
       renderPage = <History />;
       break;
     default:
-      renderPage = <Counter 
-                      counter={counter} 
-                      setCounter={setCounter} 
-                      sessionID={sessionID}
-                      setSessionID={setSessionID}
-                  />;
+      renderPage = <Counter
+        counter={counter}
+        setCounter={setCounter}
+        sessionID={sessionID}
+        setSessionID={setSessionID}
+      />;
   }
 
   return (
