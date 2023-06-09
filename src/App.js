@@ -88,7 +88,9 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID, drinkTimes, set
           const sesh_response = await postEndpoint("/add_session", init); // should return new sessionID that was added
           console.log("session id:", sesh_response);
 
-          
+          // Reset drinkTimes state variable for new session
+          setDrinkTimes([]);
+          setDrinkTimes([...drinkTimes, starttime]) // then add the new first drink 
 
           const drink_init = {
             body: {
@@ -103,16 +105,23 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID, drinkTimes, set
 
         } else {
           const date = getNowDateTime();
-          const init = {
-            body: {
-              sessionid: sessionID,
-              drink_time: date,
-            },
-          };
 
-          // query aws lambda function
-          const drink_response = await postEndpoint("/add_drink", init);
+          // Add new drinkTime to state 
+          setDrinkTimes([...drinkTimes, date]);
         }
+      } 
+      else if (drinkTimes !== [])
+      { 
+        if 
+        const init = {
+          body: {
+            sessionid: sessionID,
+            drink_time: date,
+          },
+        };
+
+        // query aws lambda function
+        const drink_response = await postEndpoint("/add_drink", init);
       }
     }
     handleEffect();
