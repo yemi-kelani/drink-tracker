@@ -206,7 +206,6 @@ const History = ({ sessions, setSessions }) => {
 
       // TODO: for each session create an HTML element for it
 
-
     };
 
     handleEffect();

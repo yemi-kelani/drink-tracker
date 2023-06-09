@@ -12,51 +12,37 @@ connection.connect();
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 
-exports.handler = async (event) => {
-    const body = {
-        message: "Hello from Lambda"
-    }
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify(body),
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        }
-    };
-    return response;
-  };
-
-// exports.handler = (event, context, callback) => {
-//     // Prevent the lambda from prematurely closing the mysql connection
-//     context.callbackWaitsForEmptyEventLoop = false;
+exports.handler = (event, context, callback) => {
+    // Prevent the lambda from prematurely closing the mysql connection
+    context.callbackWaitsForEmptyEventLoop = false;
   
-//     const reqBody = event.body;
-//     const insertQuery = "INSERT INTO users (userid) VALUES (?);";
-//     const values = [parseInt(reqBody.userid)];
+    const reqBody = event.body;
+    const insertQuery = "INSERT INTO users(userid) VALUES (?);";
+    const values = [parseInt(reqBody.userid)];
 
-//     connection.query(insertQuery, values, (error, results, fields) => {
-//       if (error) {
-//         console.error(error);
-//         callback(null, {
-//             "isBase64Encoded": false,
-//             statusCode: 400,
-//             headers: {
-//                 "Access-Control-Allow-Origin": "*",
-//                 "Access-Control-Allow-Headers": "*"
-//             },
-//             body: error.toString(),
-//         });
-//       } else {
-//         callback(
-//             null, {
-//             "isBase64Encoded": false,
-//             statusCode: 200,
-//             headers: {
-//                 "Access-Control-Allow-Origin": "*",
-//                 "Access-Control-Allow-Headers": "*"
-//             },
-//             body: "Success",
-//         });
-//       }
-//     });
-//   };
+    connection.query(insertQuery, values, (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        callback(null, {
+            "isBase64Encoded": false,
+            statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
+            body: error.toString(),
+        });
+      } else {
+        callback(
+            null, {
+            "isBase64Encoded": false,
+            statusCode: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "*"
+            },
+            body: "Success",
+        });
+      }
+    });
+  };
