@@ -22,7 +22,7 @@ exports.handler = (event, context, callback) => {
     connection.query(insertQuery, values, (error, results, fields) => {
       if (error) {
         console.error(error);
-        callback(null, {
+        return {
             "isBase64Encoded": false,
             statusCode: 400,
             headers: {
@@ -30,10 +30,18 @@ exports.handler = (event, context, callback) => {
                 "Access-Control-Allow-Headers": "*"
             },
             body: error.toString(),
-        });
+        }
+        // callback(null, {
+        //     "isBase64Encoded": false,
+        //     statusCode: 400,
+        //     headers: {
+        //         "Access-Control-Allow-Origin": "*",
+        //         "Access-Control-Allow-Headers": "*"
+        //     },
+        //     body: error.toString(),
+        // });
       } else {
-        callback(
-            null, {
+        return {
             "isBase64Encoded": false,
             statusCode: 200,
             headers: {
@@ -41,7 +49,17 @@ exports.handler = (event, context, callback) => {
                 "Access-Control-Allow-Headers": "*"
             },
             body: "Success",
-        });
+        }
+        // callback(
+        //     null, {
+        //     "isBase64Encoded": false,
+        //     statusCode: 200,
+        //     headers: {
+        //         "Access-Control-Allow-Origin": "*",
+        //         "Access-Control-Allow-Headers": "*"
+        //     },
+        //     body: "Success",
+        // });
       }
     });
   };

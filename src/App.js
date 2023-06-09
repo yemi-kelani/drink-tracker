@@ -219,7 +219,7 @@ const History = ({ sessions, setSessions }) => {
       <h3>Alcohol Consumption History</h3>
       <hr />
       <p>History:</p>
-      {sessions.map((session) => (
+      {sessions && sessions.map((session) => (
         <div key={session.sessionid}>
           <p>Start Time: {session.starttime}</p>
           <p>End Time: {session.endtime}</p>
@@ -274,7 +274,10 @@ const App = () => {
       />;
       break;
     case "history":
-      renderPage = <History />;
+      renderPage = <History 
+        sessions={sessions}
+        setSessions={setSessions}
+      />;
       break;
     default:
       renderPage = <Counter
