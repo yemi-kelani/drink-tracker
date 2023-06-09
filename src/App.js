@@ -1,23 +1,24 @@
 import "./App.css";
 import * as React from "react";
-import { API } from "aws-amplify";
 const uuid = require('uuid');
 
+const API = "https://5zagbx91fe.execute-api.us-east-2.amazonaws.com/test"
+
+// HELPER FUNCTIONS ==============================================================================================
 const postEndpoint = async (endpoint, init) => {
   try {
     console.log(`Posting to API endpoint: \"${endpoint}\"`);
+    console.log(API+endpoint)
+    
+    fetch(API + endpoint, { method: "POST", body: init['body'] , mode: 'no-cors'})
+      .then((response) => {
+        console.log(response);
+        return response;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-    // USAGE: API.post(apiName, path, myInit);
-    // I don't know what the actually api is called so this WILL
-    // need to be replaced 
-
-    // const apiname = "drinkHistoryHandler";
-    const apiname = "savedrinkapi";
-    // const apiname = "drink-tracker";
-
-    const response = await API.post(apiname, endpoint, init);
-    console.log(`Response from ${endpoint}:`, response);
-    return response;
 
   } catch(error) {
     console.log(`hit an error while querying \"${endpoint}\"`);
@@ -29,6 +30,7 @@ const getNowDateTime = () => {
   return new Date().toISOString().split('T').join(' ').split('Z').join('');
 };
 
+// COMPONENTS ====================================================================================================
 const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
   // every time the counter changes this will run automatically
   React.useEffect(() => {
@@ -57,21 +59,15 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
 
           console.log("Requesting server to add a new session...");
           const sesh_response = await postEndpoint("/add_session", init); // should return new sessionID that was added
-          
           console.log(sesh_response);
 
-          console.log("test 1");
           const drink_init = {
             body: {
-              drinkid: counter,
-
-              // TODO get actual id out of sesh_response
-              sessionid: "sesh_response",                  
-              drink_times: starttime,
+              sessionid: sessionID,                  
+              drink_time: starttime,
             }
           };
-          const drink_response = await postEndpoint("/drink_history", drink_init);
-
+          const drink_response = await postEndpoint("/add_drink", drink_init);
 
           // TODO: if the response is bad, what do we do here? reset counter? 
           // else, we need to setSessionID(sesh_response);
@@ -80,14 +76,13 @@ const Counter = ({ counter, setCounter, sessionID, setSessionID }) => {
           const date = getNowDateTime();
           const init = {
             body: {
-              drinkid: counter,
               sessionid: sessionID,                  
-              drink_times: date,
+              drink_time: date,
             },
           };
 
           // query aws lambda function
-          const drink_response = await postEndpoint("/drink_history", init);
+          const drink_response = await postEndpoint("/add_drink", init);
         }
       }
     }
@@ -187,7 +182,7 @@ const History = () => {
       const sess_response = await postEndpoint("/get_sessions", init);
 
       // TODO: for each session create an HTML element for it
-      const sessions =  sess_response.
+      const sessions =  sess_response['sessions']
 
     };
 
@@ -209,6 +204,7 @@ const style = {
   active: { "": "" },
 };
 
+// APP ===========================================================================================================
 const App = () => {
   const [page, setPage] = React.useState("counter");
   const [counter, setCounter] = React.useState(0);
