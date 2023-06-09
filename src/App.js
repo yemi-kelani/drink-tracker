@@ -10,18 +10,84 @@ const uuid = require('uuid');
 // const API = "https://5zagbx91fe.execute-api.us-east-2.amazonaws.com/test"
 
 // HELPER FUNCTIONS ==============================================================================================
-const postEndpoint = async (endpoint, init) => {
-  try {
+// const postEndpoint = async (endpoint, init) => {
+//   try {
     
-    const response = await API.post(apiname, endpoint, JSON.stringify(init));
-    console.log(response);
-    return response;
+//     const response = await API.post(apiname, endpoint, JSON.stringify(init));
+//     console.log(response);
+//     return response;
 
-  } catch (error) {
-    console.log(`hit an error while querying "${endpoint}"`);
-    console.log("Error:", error);
-    return error;
+//   } catch (error) {
+//     console.log(`hit an error while querying "${endpoint}"`);
+//     console.log("Error:", error);
+//     return error;
+//   }
+// };
+
+const postEndpoint = async (url, body) => {
+  try {
+    const requestOptions = {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body),
+      redirect: "follow",
+      mode: "no-cors"
+    };
+
+    const response = await fetch(url, requestOptions)
+    // const data = await response.json();
+    // console.log(data);
+
+    return response;
+    
+  } catch(error) {
+    console.log(`Hit an error while querying ${url}`);
+    console.log(error);
   }
+};
+
+const addDrink = async (sessionid) => {
+  const url = "https://f4ghrwj5dco2xkh52p67zwv3ti0egapg.lambda-url.us-east-2.on.aws/"
+  const drink_time = getNowDateTime();
+  const body = {"sessionid": sessionid, "drink_time": drink_time};
+  let response = await postEndpoint(url, body);
+  if (response.statusCode !== 200) {
+    throw new Error("Could not add the drink!");
+  }
+};
+
+const addUser = async (userid) => {
+  const url = "https://5uzp4pscwzketoc5hvi3de4vwy0avosp.lambda-url.us-east-2.on.aws/";
+  const body = {"userid": userid};
+  const response = await postEndpoint(url, body);
+  if (response.statusCode !== 200) {
+    throw new Error("Could not add the user!");
+  }
+};
+
+const addSession = async (userid) => {
+  const url = "https://anbpnyrabvdllurvo4urtbc2zu0cmiux.lambda-url.us-east-2.on.aws/";
+  const starttime = getNowDateTime();
+  const body = {
+    "userid": userid,
+    "starttime": starttime,
+    "endtime": starttime
+  }
+  const response = await postEndpoint(url, body);
+  if (response.statusCode !== 200) {
+    throw new Error("Could not add the session!");
+  }
+  return response.body; // Contains newly inserted sessionID
+};
+
+const getSessions = async (userid) => {
+  const url = "https://joatokpmrnk2afdf6aldrutw6m0kwrqd.lambda-url.us-east-2.on.aws/"
+  const body = {"userid": userid};
+  const response = await postEndpoint(url, body);
+  if (response.statusCode !== 200) {
+    throw new Error(`Could not retrieve sessions associated with ${userid}!`);
+  }
+  return response.body;
 };
 
 const getNowDateTime = () => {
@@ -50,19 +116,10 @@ const Counter = ({ counter, setCounter}) => {
           const starttime = getNowDateTime();
           console.log(starttime);
 
-          // Initialize endtime to starttime for now. When the user ends the session, that code will update the value
-          const init = {
-            body: {
-              userid: userID,
-              starttime: starttime,
-              endtime: starttime,
-            },
-          };
-
           console.log("userID for session", userID);
 
           console.log("Requesting server to add a new session...");
-          const response = await postEndpoint("/add-session", init); // should return new sessionID that was added
+          const response = await addSession(userID); // should return new sessionID that was added
           
           
           // const lastInsertID = parseInt(response.json()["body"]);
@@ -254,7 +311,7 @@ const App = () => {
           userid: localStorage.getItem("userid")
         }
       }
-      const response = postEndpoint("/add-user", init);
+      const response = addUser(localStorage.getItem("userid"));
       if (response.statusCode === 400) {
         throw new Error("userid could not be added to the database!");
       }

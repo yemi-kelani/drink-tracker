@@ -25,7 +25,7 @@ exports.handler = (event, context, callback) => {
         console.error(error);
         callback(null, {
             "isBase64Encoded": false,
-            statusCode: 400,
+            statusCode: 200,
             headers: {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*"
