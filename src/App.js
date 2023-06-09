@@ -172,18 +172,18 @@ const History = ({ sessions, setSessions }) => {
     if (userID === null || userID === undefined || true) return;
 
     const handleEffect = async () => {
-      const init = {
-        body: {
-          userid: userID,
-        }
-      };
+      // const init = {
+      //   body: {
+      //     userid: userID,
+      //   }
+      // };
 
-      console.log("Requesting server for all sessions...");
-      const sess_response = await postEndpoint("/get-sessions", init);
-      if(sess_response.statusCode !== 200)
-      {
-        throw new Error("Issue requesting server for all sessions associated with user ", userID);
-      }
+      // console.log("Requesting server for all sessions...");
+      // const sess_response = await postEndpoint("/get-sessions", init);
+      // if(sess_response.statusCode !== 200)
+      // {
+      //   throw new Error("Issue requesting server for all sessions associated with user ", userID);
+      // }
 
       // TODO: proccess sess_response to get list of sessions
       // const sessions = sess_response.body;
