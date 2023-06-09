@@ -202,7 +202,7 @@ const History = ({ sessions, setSessions }) => {
         },
       ];
 
-      setSessions(seshes);
+      await setSessions(seshes);
 
       // TODO: for each session create an HTML element for it
 
