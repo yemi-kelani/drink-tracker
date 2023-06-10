@@ -119,7 +119,7 @@ const Counter = ({ counter, setCounter}) => {
           console.log("userID for session", userID);
 
           console.log("Requesting server to add a new session...");
-          const response = await addSession(userID); // should return new sessionID that was added
+          // const response = await addSession(userID); // should return new sessionID that was added
           
           
           // const lastInsertID = parseInt(response.json()["body"]);
@@ -311,10 +311,10 @@ const App = () => {
           userid: localStorage.getItem("userid")
         }
       }
-      const response = addUser(localStorage.getItem("userid"));
-      if (response.statusCode === 400) {
-        throw new Error("userid could not be added to the database!");
-      }
+      // const response = addUser(localStorage.getItem("userid"));
+      // if (response.statusCode === 400) {
+      //   throw new Error("userid could not be added to the database!");
+      // }
       
     }
     console.log("userid:", localStorage.getItem("userid"));

@@ -31,13 +31,13 @@ CREATE TABLE drinks
 );
 ALTER TABLE drinks AUTO_INCREMENT = 1000;
 
-INSERT INTO users (userid) 
-VALUES (10005);
+-- INSERT INTO users (userid) 
+-- VALUES (10005);
 
-INSERT INTO sessions (userid, starttime, endtime) 
-VALUES (10005, "2023-06-09 03:27:35.168", "2023-06-09 03:27:36.168");
+-- INSERT INTO sessions (userid, starttime, endtime) 
+-- VALUES (10005, "2023-06-09 03:27:35.168", "2023-06-09 03:27:36.168");
 
 
-INSERT INTO drinks (drinkid, sessionid, drink_time) 
-VALUES (10005, LAST_INSERT_ID(), "2023-06-09 03:27:35.168");
+-- INSERT INTO drinks (drinkid, sessionid, drink_time) 
+-- VALUES (10005, LAST_INSERT_ID(), "2023-06-09 03:27:35.168");
 
